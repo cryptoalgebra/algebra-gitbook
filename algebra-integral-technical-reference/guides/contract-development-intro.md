@@ -1,3 +1,7 @@
+---
+icon: desktop-arrow-down
+---
+
 # Environment Setup
 
 ## Intro
@@ -16,7 +20,7 @@ cd boilerplate
 npm install
 ```
 
-Then go to the [Local Node with a Polygon Fork](#local-node-with-a-polygon-fork) section below to complete setup and start building.
+Then go to the [Local Node with a Polygon Fork](contract-development-intro.md#local-node-with-a-polygon-fork) section below to complete setup and start building.
 
 ## Start from Scratch
 
@@ -157,7 +161,7 @@ npx hardhat test --network localhost
 
 With your environment set up, head into the other guides to start building:
 
-* [Swaps](swaps/README.md)
-* [Providing Liquidity](providing-liquidity/README.md)
-* [Flashloans](flashloans/README.md)
-* [Custom Plugins](custom-plugins/README.md)
+* [Swaps](swaps/)
+* [Providing Liquidity](providing-liquidity/)
+* [Flashloans](flashloans/)
+* [Custom Plugins](custom-plugins/)
