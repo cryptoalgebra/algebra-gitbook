@@ -1,0 +1,18 @@
+# QuickSwap Soneium
+
+## Integral 1.2
+
+[API Reference](../../../algebra-integral-technical-reference/integration-process/specification-and-api-of-contracts.md)
+
+[GitHub Commit](https://github.com/cryptoalgebra/Algebra/tree/v1.2-integral)
+
+## Contracts
+
+Chain = `Soneium`
+
+WETH= `0x4200000000000000000000000000000000000006`
+
+POOL\_INIT\_CODE\_HASH = `0xb3fc09be5eb433d99b1ec89fd8435aaf5ffea75c1879e19028aa2414a14b3c85`
+
+<table><thead><tr><th width="295">Contract</th><th>Address</th></tr></thead><tbody><tr><td><a href="https://github.com/cryptoalgebra/Algebra/blob/master/src/core/contracts/AlgebraPoolDeployer.sol">AlgebraPoolDeployer</a></td><td><code>0x7B446Bfb3763Ed0892f08893Eb06Dda79aB28CB9</code></td></tr><tr><td><a href="https://github.com/cryptoalgebra/Algebra/blob/master/src/core/contracts/AlgebraFactory.sol">AlgebraFactory</a></td><td><code>0x8Ff309F68F6Caf77a78E9C20d2Af7Ed4bE2D7093</code></td></tr><tr><td><a href="https://github.com/cryptoalgebra/Algebra/blob/master/src/plugin/contracts/BasePluginV1Factory.sol">PluginFactory</a></td><td><code>0x980dc694Fb758C5Db4a8A035212072bC962adFD9</code></td></tr><tr><td><a href="https://github.com/cryptoalgebra/Algebra/blob/master/src/periphery/contracts/lens/Quoter.sol">Quoter</a></td><td><code>0x4c5663252bBAB0a3B303a711823aD70a0ec9aE31</code></td></tr><tr><td><a href="https://github.com/cryptoalgebra/Algebra/blob/master/src/periphery/contracts/lens/QuoterV2.sol">QuoterV2</a></td><td><code>0x22e5195BcC9b0C87f330FbCE2755B263662578E2</code></td></tr><tr><td><a href="https://github.com/cryptoalgebra/Algebra/blob/master/src/periphery/contracts/SwapRouter.sol">SwapRouter</a></td><td><code>0xeba58c20629ddab41e21a3E4E2422E583ebD9719</code></td></tr><tr><td><a href="https://github.com/cryptoalgebra/Algebra/blob/master/src/periphery/contracts/NonfungibleTokenPositionDescriptor.sol">NonfungibleTokenPositionDescriptor</a></td><td><code>0x9F90F50186414DAB83b222A4ae01D75041Ab15bd</code></td></tr><tr><td><a href="https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.1-solc-0.7-2/contracts/proxy/TransparentUpgradeableProxy.sol">Proxy</a></td><td><code>0xBF450784Fc69FBD4E75B0795FD0a65E38316BE64</code></td></tr><tr><td><a href="https://github.com/cryptoalgebra/Algebra/blob/master/src/periphery/contracts/NonfungiblePositionManager.sol">NonfungiblePositionManager</a></td><td><code>0x0629B3c6E1cCfF2e31e3A9Bd67ec96b23BE6f1e9</code></td></tr><tr><td><a href="https://github.com/cryptoalgebra/Algebra/blob/master/src/periphery/contracts/lens/AlgebraInterfaceMulticall.sol">AlgebraInterfaceMulticall</a></td><td><code>0x2E4C17aEE528084e6dB16882d24fc1Dd0Ef20D97</code></td></tr><tr><td><a href="https://github.com/cryptoalgebra/Algebra/blob/master/src/farming/contracts/farmings/AlgebraEternalFarming.sol">AlgebraEternalFarming</a></td><td><code>0x69504bA6AB62B9Ed441469920acEC07D1df765C5</code></td></tr><tr><td><a href="https://github.com/cryptoalgebra/Algebra/blob/master/src/farming/contracts/FarmingCenter.sol">FarmingCenter</a></td><td><code>0x94e1B396F844d890F8c84c3f581462399a74550A</code></td></tr><tr><td><a href="https://github.com/cryptoalgebra/Algebra/blob/master/src/periphery/contracts/lens/TickLens.sol">TickLens</a></td><td><code>0x9AfA76331a01b1b25289306fbD72A4e032FDFe06</code></td></tr><tr><td><a href="https://github.com/cryptoalgebra/Algebra/blob/master/src/periphery/contracts/AlgebraCustomPoolEntryPoint.sol">EntryPoint</a></td><td><code>0xbDcFc56aEA5AEc541F5eB34FbeC07838175C1138</code></td></tr><tr><td><a href="https://github.com/cryptoalgebra/Algebra/blob/master/src/core/contracts/AlgebraCommunityVault.sol">AlgebraCommunityVault</a></td><td><code>0x756c880Bb7A36628F11c234465994EF97d5CE064</code></td></tr></tbody></table>
+

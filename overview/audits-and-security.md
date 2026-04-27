@@ -1,0 +1,22 @@
+---
+icon: shield-check
+---
+
+# Audits & Security
+
+The design of Algebra Integral prioritizes robust, production-grade security. Every line of code is first reviewed by our internal experts and covered with all necessary tests to ensure safe, predictable behavior.&#x20;
+
+Our smart contracts have already undergone multiple independent audits by leading firms, with ongoing reviews planned as the ecosystem evolves. Below is the list of completed audits, with future additions to be included as Algebra expands its modular AMM infrastructure.
+
+## Algebra Integral
+
+| Module                              | Auditor                                            | Report                                                                                                                              |                                                                                                                                                              |
+| ----------------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Core                                | [MixBytes](https://mixbytes.io/)                   | [report](https://github.com/cryptoalgebra/Algebra/blob/master/audits/Core_audit_report_MixBytes.pdf)                                | [MixBytes repository](https://github.com/mixbytes/audits_public/blob/master/Algebra%20Finance/Core/Algebra%20Finance%20Core%20Security%20Audit%20Report.pdf) |
+| Farming                             | [MixBytes](https://mixbytes.io/)                   | [report](https://github.com/cryptoalgebra/Algebra/blob/master/audits/Farming_Plugin_report_MixBytes.pdf)                            | [MixBytes repository](https://github.com/mixbytes/audits_public/blob/master/Algebra%20Finance/Farmings/Algebra%20Farmings%20Security%20Audit%20Report.pdf)   |
+| Base plugin                         | [MixBytes](https://mixbytes.io/)                   | [report](https://github.com/cryptoalgebra/Algebra/blob/master/audits/Base_Plugin_report_MixBytes.pdf)                               | [MixBytes repository](https://github.com/mixbytes/audits_public/blob/master/Algebra%20Finance/Plugins/Algebra%20Plugins%20Security%20Audit%20Report.pdf)     |
+| Full protocol codebase, bug hunting | [Riley Holterhus](https://www.rileyholterhus.com/) | [report](https://github.com/cryptoalgebra/Algebra/blob/dev/audits/Riley_Holterhus_Algebra_Integral.pdf)                             |                                                                                                                                                              |
+| Entire protocol                     | [Paladin](https://paladinsec.co/)                  | [report](https://github.com/cryptoalgebra/Algebra/blob/master/audits/Algebra_Paladin_report.pdf)                                    |                                                                                                                                                              |
+| Custom Pools                        | [Bailsec](https://bailsec.io/)                     | [report](https://github.com/cryptoalgebra/Algebra/blob/master/audits/Bailsec_Algebra_Integral_Update_Audit_differential_Report.pdf) |                                                                                                                                                              |
+| Core Integral v1.2                  | [Bailsec](https://bailsec.io/)                     | [report](https://github.com/cryptoalgebra/Algebra/blob/integral-v1.2.1/audits/Bailsec_Algebra_Integralv1.2_Core_Update_Audit.pdf)   |                                                                                                                                                              |
+| Core Integral v1.2.1                | [Bailsec](https://bailsec.io/)                     | [report](https://github.com/cryptoalgebra/Algebra/blob/integral-v1.2.1/audits/Bailsec_Algebra_v1.2.1_Report.pdf)                    |                                                                                                                                                              |

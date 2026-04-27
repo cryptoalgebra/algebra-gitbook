@@ -1,0 +1,53 @@
+# Contracts Deployment
+
+[Build](/broken/pages/qQoJhhG2eXGLz9UCZWq1)
+
+[Tests](/broken/pages/qQoJhhG2eXGLz9UCZWq1)
+
+[Coverage](/broken/pages/qQoJhhG2eXGLz9UCZWq1)
+
+[Deploy](/broken/pages/qQoJhhG2eXGLz9UCZWq1)
+
+### Build
+
+_Requires npm >= 8.0.0_
+
+To install dependencies, you need to run the command in the root directory:
+
+```
+$ npm run bootstrap
+```
+
+This will download and install dependencies for all modules and set up husky hooks.
+
+To compile a specific module, you need to run the following command in the module folder:
+
+```
+$ npm run compile
+```
+
+### Tests
+
+Tests for a specific module are run by the following command in the module folder:
+
+```
+$ npm run test
+```
+
+### Tests coverage
+
+To get a test coverage for specific module, you need to run the following command in the module folder:
+
+```
+$ npm run coverage
+```
+
+### Deploy
+
+Firstly you need to create `.env` file in the root directory of project as in `env.example`.
+
+To deploy all modules in specific network:
+
+```
+$ node scripts/deployAll.js <network>
+```
