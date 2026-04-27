@@ -8,34 +8,6 @@ This guide walks through building a module for the Algebra Integral upgradeable 
 
 You can study existing official modules as reference implementations in the [plugins monorepo](https://github.com/cryptoalgebra/plugins-monorepo).
 
-## Architecture Overview
-
-The default Algebra plugin is an upgradeable Beacon Proxy. Each pool has its own proxy instance, but all proxies share logic from a single implementation. To keep things composable and upgradeable, logic is split into independent modules.
-
-Every module has two parts:
-
-```
-┌─────────────────────────────────────────────────────┐
-│              AlgebraUpgradeablePlugin                │
-│  (BeaconProxy → inherits all Connectors)            │
-│                                                      │
-│  ┌──────────────┐  ┌──────────────┐  ┌───────────┐  │
-│  │  Connector A │  │  Connector B │  │   ...     │  │
-│  │  (abstract)  │  │  (abstract)  │  │           │  │
-│  └──────┬───────┘  └──────┬───────┘  └─────┬─────┘  │
-│         │ delegatecall    │ delegatecall    │         │
-└─────────┼─────────────────┼────────────────┼─────────┘
-          ▼                 ▼                ▼
-   Implementation A  Implementation B    ...
-   (standalone        (standalone
-    contract)          contract)
-
-Storage is namespaced per module via ERC-7201 - lives
-in the proxy, shared between Connector and Implementation.
-```
-
-The proxy holds all state. When the connector calls `_delegateCall(implementationAddress, ...)`, the implementation runs in the proxy's context - it reads and writes the proxy's storage while executing the implementation's logic. This lets you upgrade logic without touching storage.
-
 ## Part 1: Implementation Contract
 
 The implementation contract contains all logic for your module. State is stored using [ERC-7201 namespaced storage](https://eips.ethereum.org/EIPS/eip-7201): each module defines a storage library with a unique namespace slot, so module states never collide regardless of inheritance order or future upgrades.
