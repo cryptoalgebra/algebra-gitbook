@@ -59,3 +59,20 @@ Pool parameters associated with a plugin are stored tightly packed in a bitmap. 
 In each pool, a plugin can be replaced at any time by an address with the appropriate rights (owner AlgebraFactory, or owner of the `POOLS_ADMINISTRATOR` role). The plugin is replaced using the `setPlugin` method in the liquidity pool itself.
 
 **It is important to note** that access to the ability to replace plugins should be controlled with maximum security, as this action allows changing the logic of the liquidity pool. Malicious plugin replacement can lead to negative consequences for users. It is strongly recommended to take additional protection measures, including the use of multi-sig accounts and the implementation of more granular access rights.
+
+### Upgradeable Plugin Architecture
+
+Recent versions of Algebra Integral support an **upgradeable modular plugin architecture** based on the Beacon Proxy pattern. If a DEX uses this version of plugins, each pool's plugin is a `BeaconProxy` - a lightweight proxy that delegates all calls to a shared implementation address stored in a Beacon contract.
+
+**Key properties:**
+
+* **No address change on upgrade** - the proxy address attached to each pool stays the same across upgrades. Protocols and users that interact with the plugin directly are never disrupted.
+* **Atomic upgrade for all pools** - a single `upgradePlugins()` call on the plugin factory upgrades the logic for every pool simultaneously. No manual migration per pool is required.
+* **Storage is preserved** - all plugin state (fee configs, oracle data, farming state, etc.) lives in the proxy and is never touched during an upgrade.
+
+**Modular composition.** The plugin logic is split into independent modules. Each module consists of two parts:
+
+* **Implementation contract** - a standalone contract containing all the module's logic. It is called via `delegatecall` and executes in the context of the proxy, reading and writing state through [ERC-7201 namespaced storage](https://eips.ethereum.org/EIPS/eip-7201) to guarantee isolation between modules.
+* **Connector** - an abstract contract inherited by the assembled plugin. It exposes the module's public interface, stores the implementation address as an immutable, and routes all state-changing calls through `delegatecall` to the implementation.
+
+The assembled `AlgebraUpgradeablePlugin` inherits from `UpgradeableAbstractPlugin` and all module connectors, combining their hooks and public interfaces into a single upgradeable contract.

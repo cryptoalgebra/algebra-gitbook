@@ -131,6 +131,8 @@
     * [Plugin Development](algebra-integral-technical-reference/guides/custom-plugins/plugin-development.md)
     * [Plugin Testing](algebra-integral-technical-reference/guides/custom-plugins/plugin-testing.md)
     * [Plugin Deployment](algebra-integral-technical-reference/guides/custom-plugins/plugin-deployment.md)
+  * [Plugin Module Development](algebra-integral-technical-reference/guides/plugin-modules/README.md)
+    * [Module Development](algebra-integral-technical-reference/guides/plugin-modules/module-development.md)
 * [Changes V1](algebra-integral-technical-reference/changes-v1.md)
 * [Changes V1.1](algebra-integral-technical-reference/changes-v1.1.md)
 * [Changes v1.2](algebra-integral-technical-reference/changes-v1.2.md)
