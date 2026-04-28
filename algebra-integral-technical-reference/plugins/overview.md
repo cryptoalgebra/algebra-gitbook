@@ -16,14 +16,14 @@ Any developer can build a custom plugin for any DEX that has deployed an **Entry
 This is the right path if you want to:
 
 * Experiment with a new fee model or hook logic
-* Build a specialized pool for your own protocol (e.g. a pool with order-book-style execution or custom access control)
+* Build a specialized pool for your own protocol&#x20;
 * Test a new module before proposing it for inclusion in the default plugin
 
-For a step-by-step walkthrough, see the [Custom Plugin Guides](../guides/custom-plugins/README.md).
+For a step-by-step walkthrough, see the [Custom Plugin Guides](../guides/custom-plugins/).
 
 ## Default Pools and the Default Plugin
 
-When a DEX deploys Algebra Integral, it comes with a set of **default pools**. These are the main pools users interact with — they are created through the standard factory and have a shared **default plugin** attached automatically.
+When a DEX deploys Algebra Integral, it comes with a set of **base pools**. These are the main pools users interact with — they are created through the standard factory and have a shared **default plugin** attached automatically.
 
 The default plugin is what gives these pools their core features: dynamic fees, a volatility oracle, farming support, ALM integration, and security controls. Every default pool on a DEX runs the same plugin, so all pools benefit from updates and improvements simultaneously.
 
