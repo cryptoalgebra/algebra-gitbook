@@ -11,7 +11,7 @@ A more detailed general description of plugins can be found in the section: [Cor
 
 ## Creating Custom Plugins
 
-Any developer can build a custom plugin for any DEX that has deployed an **EntryPoint** contract. The EntryPoint gives you the ability to create a pool with your own plugin attached - without touching the DEX's default pools or requiring any special permissions from the DEX team.
+Any developer can build a custom plugin for any DEX that has deployed an **EntryPoint** contract. The EntryPoint gives you the ability to create a pool with your own plugin attached - without touching the DEX's base pools or requiring any special permissions from the DEX team.
 
 This is the right path if you want to:
 
@@ -21,11 +21,11 @@ This is the right path if you want to:
 
 For a step-by-step walkthrough, see the [Custom Plugin Guides](../guides/custom-plugins/).
 
-## Default Pools and the Default Plugin
+## Base pools
 
 When a DEX deploys Algebra Integral, it comes with a set of **base pools**. These are the main pools users interact with — they are created through the standard factory and have a shared **default plugin** attached automatically.
 
-The default plugin is what gives these pools their core features: dynamic fees, a volatility oracle, farming support, ALM integration, and security controls. Every default pool on a DEX runs the same plugin, so all pools benefit from updates and improvements simultaneously.
+The default plugin is what gives these pools their core features: dynamic fees, a volatility oracle, farming support, ALM integration, and security controls. Every base pool on a DEX runs the same plugin, so all pools benefit from updates and improvements simultaneously.
 
 The default plugin is built from independent **modules**. Each module covers one feature area and can be upgraded or extended without affecting the others. The plugin itself is deployed as a Beacon Proxy, so upgrading the logic for all pools at once requires only a single transaction, with no address changes and no loss of stored state.
 
@@ -33,7 +33,7 @@ The source code for all official modules is available in the [plugins monorepo](
 
 ## Contributing a Module to the Default Plugin
 
-If you want your plugin logic to be used across **all default pools on a DEX** - rather than just custom pools - you need to implement it as a module following the Connector + Implementation + Storage pattern described above.
+If you want your plugin logic to be used across **all base pools on a DEX** - rather than just custom pools - you need to implement it as a module following the Connector + Implementation + Storage pattern described above.
 
 The process:
 
