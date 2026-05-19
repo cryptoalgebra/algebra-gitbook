@@ -14,16 +14,14 @@ Algebra is a DEX engine with a unique AMM model, offering features like Concentr
 
 ## Classic Logos
 
-<div><figure><img src="../.gitbook/assets/One Color Horizontal.svg" alt=""><figcaption></figcaption></figure> <figure><img src="../.gitbook/assets/White Logo Vertical (2).svg" alt=""><figcaption></figcaption></figure></div>
+<div><figure><img src="../.gitbook/assets/One Color Horizontal.svg" alt=""><figcaption></figcaption></figure> <figure><img src="../.gitbook/assets/White Logo Vertical.svg" alt=""><figcaption></figcaption></figure></div>
 
-
-
-<figure><img src="../.gitbook/assets/White Logo Horizontal (2).svg" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/White Logo Horizontal.svg" alt=""><figcaption></figcaption></figure>
 
 ## Integral Logos
 
-<figure><img src="../.gitbook/assets/alg_intg_logo (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/alg_intg_logo.png" alt=""><figcaption></figcaption></figure>
 
-<div><figure><img src="../.gitbook/assets/Algebra Integral _hor (2).svg" alt=""><figcaption></figcaption></figure> <figure><img src="../.gitbook/assets/Algebra Integral (1).png" alt=""><figcaption></figcaption></figure></div>
+<div><figure><img src="../.gitbook/assets/Algebra Integral _hor.svg" alt=""><figcaption></figcaption></figure> <figure><img src="../.gitbook/assets/Algebra Integral.png" alt=""><figcaption></figcaption></figure></div>
 
-<figure><img src="../.gitbook/assets/Algebra Integral Symbol (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Algebra Integral Symbol.png" alt=""><figcaption></figcaption></figure>

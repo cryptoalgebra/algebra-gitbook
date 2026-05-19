@@ -2,19 +2,19 @@
 
 ## Overview
 
-Algebra’s Pools have its dedicated plugins, individual smart contracts.&#x20;
+Algebra’s Pools have its dedicated plugins, individual smart contracts.
 
-Algebra ALM rebalancing is performed via such a plugin (ALM Plugin) through “afterSwap” hook execution.&#x20;
+Algebra ALM rebalancing is performed via such a plugin (ALM Plugin) through “afterSwap” hook execution.
 
-ALM Plugin works jointly with Volatility Oracle Plugin and interacts with Rebalance Manager. The last one performs main calculations, checks requirements and decides how and whether or not to do a rebalancing.&#x20;
+ALM Plugin works jointly with Volatility Oracle Plugin and interacts with Rebalance Manager. The last one performs main calculations, checks requirements and decides how and whether or not to do a rebalancing.
 
 Rebalancing is performed by AlgebraVault, which holds LP NFT and pending deposit assets.
 
-<figure><img src="../../.gitbook/assets/Снимок экрана 2025-12-24 в 17.32.52 (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Снимок экрана 2025-12-24 в 17.32.52.png" alt=""><figcaption></figcaption></figure>
 
 ### ALM Plugin
 
-This is a simple contract which passes data from Volatility Oracle to Rebalance Manager.&#x20;
+This is a simple contract which passes data from Volatility Oracle to Rebalance Manager.
 
 The essential data is current tick, slow and fast TWAPs. Depending on some checks it might not call Rebalance Manager:
 
@@ -29,7 +29,7 @@ Configuration:
 
 ### Rebalance Manager
 
-Rebalance Manager is the core smart contract of the rebalancing process.&#x20;
+Rebalance Manager is the core smart contract of the rebalancing process.
 
 It decides whether to do a rebalance or not, on which ranges to add a position, or pause the rebalancing process.
 

@@ -30,8 +30,6 @@ Decrease `beta1` and/or `beta2`. Also it's better to change the `gamma` accordin
 
 Formulas take into account volatility and volume over the last 24 hours
 
-
-
 ## How to tweak formula behaviour
 
 Sigmoid coefficients Fee calculation can be tuned by the following parameters:
@@ -50,7 +48,7 @@ Sigmoid coefficients Fee calculation can be tuned by the following parameters:
 
 Adaptive fee function is a combination of several sigmoids. The plot of the standard sigmoid function looks like this:
 
-![Adaptive fee sigmoid](<../../.gitbook/assets/2560px-Sigmoid-function-2.svg (1).png>)
+![Adaptive fee sigmoid](../../.gitbook/assets/2560px-Sigmoid-function-2.svg.png)
 
 We use a more flexible formula for sigmoids:
 
@@ -74,11 +72,11 @@ Default params:
 
 So
 
-**max fee** value is: `baseFee` + `alpha1` + `alpha2`&#x20;
+**max fee** value is: `baseFee` + `alpha1` + `alpha2`
 
 **min fee** value is: `baseFee`
 
-**midpoint** of the first sigmoid: `beta1`              **midpoint** of the second sigmoid: `beta2`
+**midpoint** of the first sigmoid: `beta1` **midpoint** of the second sigmoid: `beta2`
 
 sigmoid “jump” “starts” around `beta - 6 * gamma`, ends around `beta + 6 * gamma`
 
