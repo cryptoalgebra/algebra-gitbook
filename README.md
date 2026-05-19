@@ -30,8 +30,8 @@ The classic CLAMM (Concentrated Liquidity AMM) engine trusted by dozens of DEXes
 
 ## Key Stats
 
-**$150B+ in Cumulative Volume**\
-Algebra-powered DEXes have facilitated over **$150 billion** in total trading volume, with daily trading volume reaching **$794million** and managing up to **$288 million in Total Value Locked (TVL)** — underscoring the project's impact across DeFi ecosystems.
+**$200B+ in Cumulative Volume**\
+Algebra-powered DEXes have facilitated over **$200 billion** in total trading volume, with daily trading volume reaching **$794 million** and managing up to **$302 million in Total Value Locked (TVL)** — underscoring the project's impact across DeFi ecosystems.
 
 **Top 10 Most-Forked DEX Protocol**\
 Ranked as the [**8th most forked protocol**](https://defillama.com/forks) on DeFiLlama, Algebra’s AMM infrastructure continues to set the standard for DEX development and innovation.
