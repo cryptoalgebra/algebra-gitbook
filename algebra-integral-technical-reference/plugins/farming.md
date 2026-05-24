@@ -46,7 +46,7 @@ This means:
 
 ***
 
-## Minimal Position Width and JIT Protection
+## Minimal Position Width
 
 The **Minimal range** parameter sets the minimum allowed width `(tickUpper - tickLower)` for a position to enter farming.
 
@@ -58,7 +58,7 @@ This is a protection against **phantom liquidity attacks**. Without a minimum wi
 
 The attacker's position spends most of its time "in farming" and collecting rewards, but disappears exactly when a real swap needs it. This is phantom liquidity: it shows up in the accounting but provides no real market-making function.
 
-By requiring a minimum position width, the protocol makes this attack impractical. Wider positions span many ticks, so precise in-and-out timing around a single swap does not let the attacker fully escape impermanent loss.
+By requiring a minimum position width, the protocol makes this attack impractical.
 
 {% hint style="info" %}
 The default `TICK_SPACING` in Algebra is `60`, but it can be changed per pool. The position width is always a multiple of `TICK_SPACING`. To require at least 5 tick spacings with the default value, set Minimal range to `300` (5 x 60).
