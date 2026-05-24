@@ -6,21 +6,23 @@ The farming is designed for positions created via AlgebraPositionManager. It wil
 
 In each pool, you can have one farming instance. Rewards may be distributed in one or two tokens, with options to add or withdraw rewards as needed. Distribution occurs every second, allocated to all in-range positions according to their liquidity in the current tick. NFT of a position is not transferred on enter.
 
----
+***
 
 ## Architecture
 
 Farming consists of three contracts that work together:
 
-| Contract | Role |
-|---|---|
-| **FarmingCenter** | Entry point for users. Verifies NFT ownership, routes calls to AlgebraEternalFarming, connects virtual pools to pool plugins. |
-| **AlgebraEternalFarming** | Core farming logic. Stores incentives and per-position farm records, calculates and distributes rewards. |
-| **EternalVirtualPool** | A "virtual" pool deployed for each incentive. Mirrors the tick and liquidity state of the real pool for the purpose of reward accounting only. |
+| Contract                  | Role                                                                                                                                           |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| **FarmingCenter**         | Entry point for users. Verifies NFT ownership, routes calls to AlgebraEternalFarming, connects virtual pools to pool plugins.                  |
+| **AlgebraEternalFarming** | Core farming logic. Stores incentives and per-position farm records, calculates and distributes rewards.                                       |
+| **EternalVirtualPool**    | A "virtual" pool deployed for each incentive. Mirrors the tick and liquidity state of the real pool for the purpose of reward accounting only. |
 
 The **FarmingPlugin** is a plugin connected to the Algebra pool. On every swap, it notifies the EternalVirtualPool about tick crossings, keeping the virtual pool in sync with the real pool.
 
----
+<figure><img src="../../.gitbook/assets/image (16).png" alt=""><figcaption></figcaption></figure>
+
+***
 
 ## Reward Calculation
 
@@ -38,11 +40,11 @@ $$\text{reward} = (\text{innerGrowth}_\text{now} - \text{innerGrowth}_\text{entr
 
 This means:
 
-- **Out-of-range positions earn nothing**: only positions whose tick range covers the current price accumulate rewards.
-- **Larger liquidity, larger share**: reward is proportional to the position's contribution to `currentLiquidity`.
-- Rewards stop accruing automatically when the `rewardReserve` in the virtual pool is exhausted.
+* **Out-of-range positions earn nothing**: only positions whose tick range covers the current price accumulate rewards.
+* **Larger liquidity, larger share**: reward is proportional to the position's contribution to `currentLiquidity`.
+* Rewards stop accruing automatically when the `rewardReserve` in the virtual pool is exhausted.
 
----
+***
 
 ## Minimal Position Width and JIT Protection
 
@@ -62,22 +64,22 @@ By requiring a minimum position width, the protocol makes this attack impractica
 The default `TICK_SPACING` in Algebra is `60`, but it can be changed per pool. The position width is always a multiple of `TICK_SPACING`. To require at least 5 tick spacings with the default value, set Minimal range to `300` (5 x 60).
 {% endhint %}
 
----
+***
 
 ## Roles
 
 Two privileged roles control farming administration:
 
-| Role | Permissions |
-|---|---|
-| `INCENTIVE_MAKER_ROLE` | Create a new farming (`createEternalFarming`), manually deactivate it (`deactivateIncentive`), change reward rates (`setRates`). |
+| Role                          | Permissions                                                                                                                                           |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `INCENTIVE_MAKER_ROLE`        | Create a new farming (`createEternalFarming`), manually deactivate it (`deactivateIncentive`), change reward rates (`setRates`).                      |
 | `FARMINGS_ADMINISTRATOR_ROLE` | Withdraw excess rewards (`decreaseRewardsAmount`), activate emergency withdraw mode (`setEmergencyWithdrawStatus`), update the FarmingCenter address. |
 
 Any address can **add** rewards to an existing active farming via `addRewards` (no special role required).
 
 Roles are managed by the Algebra Factory (role-based access control inherited from the core).
 
----
+***
 
 ## Deactivation and Emergency Withdraw
 
@@ -97,11 +99,11 @@ Once deactivated, no new positions can enter, and rates cannot be set to non-zer
 
 When active:
 
-- No new positions can enter farming.
-- Positions can exit **without reward calculation**: rewards accumulated up to that point are forfeited.
-- This is a last-resort tool intended for critical situations (e.g. a bug in the reward accounting logic). It should not be used in normal operations.
+* No new positions can enter farming.
+* Positions can exit **without reward calculation**: rewards accumulated up to that point are forfeited.
+* This is a last-resort tool intended for critical situations (e.g. a bug in the reward accounting logic). It should not be used in normal operations.
 
----
+***
 
 ## Behavior on Liquidity Changes
 
@@ -125,7 +127,7 @@ When an NFT is **burned** (liquidity reaches 0), the exit is triggered automatic
 Because exit + re-enter happens atomically on every liquidity change, there is no need to manually exit farming before adjusting a position.
 {% endhint %}
 
----
+***
 
 ## Managing Farming in admin panel
 
@@ -174,7 +176,7 @@ Bonus reward rate to be distributed **per second**. Without decimals.
 
 Minimal range for position to being able to participate in farming. Algebra Protocol `TICK_SPACING` is `60`. The position cannot be narrower than 60, and its range is always in multiples of 60. If you want to limit range to at least 5 ticks, you should set this parameter to 300 (5 \* 60).
 
----
+***
 
 ## Create Eternal Farming
 
@@ -200,7 +202,7 @@ Submit the transaction. The specified reward amount is sent to the FarmingCenter
 {% endstep %}
 {% endstepper %}
 
----
+***
 
 ## Two-Step Reward Claiming
 
@@ -226,13 +228,13 @@ This separation means a user can collect rewards as often as they like without e
 `getRewardInfo` on AlgebraEternalFarming returns a snapshot that may be slightly outdated. For the exact current amount, use a static call to `collectRewards` on FarmingCenter.
 {% endhint %}
 
----
+***
 
 ## How to turn Eternal Farming off?
 
 To turn Eternal Farming off you can set `Reward rate` and `Bonus Reward Rate` to 0.
 
----
+***
 
 ## Detaching and Attaching
 
