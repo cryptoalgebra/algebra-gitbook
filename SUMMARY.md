@@ -126,6 +126,7 @@
     * [Calling Flash](algebra-integral-technical-reference/guides/flashloans/calling-flash.md)
     * [Flash Callback](algebra-integral-technical-reference/guides/flashloans/flash-callback.md)
     * [Final Contract](algebra-integral-technical-reference/guides/flashloans/final-contract.md)
+  * [MCP server](algebra-integral-technical-reference/guides/mcp-server.md)
   * [Custom Plugin Guides](algebra-integral-technical-reference/guides/custom-plugins/README.md)
     * [Plugin Development](algebra-integral-technical-reference/guides/custom-plugins/plugin-development.md)
     * [Plugin Testing](algebra-integral-technical-reference/guides/custom-plugins/plugin-testing.md)
