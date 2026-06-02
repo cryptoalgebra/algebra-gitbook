@@ -103,6 +103,7 @@
   * [Managed Swap Fee](algebra-integral-technical-reference/plugins/managed-swap-fee.md)
   * [Automated Liquidity Management (A-ALM)](algebra-integral-technical-reference/plugins/automated-liquidity-management-a-alm.md)
   * [FAQ](algebra-integral-technical-reference/plugins/faq.md)
+* [Algebra AI Kit](algebra-integral-technical-reference/algebra-ai-kit.md)
 * [Omega Router](algebra-integral-technical-reference/omega-router/README.md)
   * [Overview](algebra-integral-technical-reference/omega-router/overview.md)
   * [Technical Reference](algebra-integral-technical-reference/omega-router/technical-reference.md)
