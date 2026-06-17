@@ -222,6 +222,14 @@ function beforeSwap(
 * if someone swaps in a `zeroToOne` direction, plugin sets LP fee to `overrideFee / 2`
 * if someone swaps in a `oneToZero` direction, plugin sets LP fee to `overrideFee`
 
+{% hint style="warning" %}
+`safelyGetStateOfAMM()` checks only the pool reentrancy lock. Pool hooks are executed while the pool is unlocked, and there is no separate hook lock.
+
+For `swapWithPaymentInAdvance`, input tokens are transferred to the pool and recorded in reserves before `beforeSwap` is called, while the price, tick, liquidity, fee growth are still not updated.
+
+Take this into account if your plugin makes external contract calls or uses reserves and pool state info for financial decisions.
+{% endhint %}
+
 <mark style="background-color:orange;">**If you would not like to manipulate LP fee at all in your plugin, it just has to return 0 as overrideFee.**</mark>
 
 Further, since we want to charge plugin fee also on burn operations, we have to implement <kbd>beforeModifyPosition</kbd> hook:

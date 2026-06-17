@@ -122,6 +122,10 @@ And the safest way to get price and other data is to use special getter function
 (uint160 price, , , , , ,) = IAlgebraPool(poolAddress).safelyGetStateOfAMM();
 ```
 
+{% hint style="warning" %}
+`safelyGetStateOfAMM()` checks only the pool reentrancy lock. Pool hooks are executed while the pool is unlocked, so calls made from a plugin hook can pass this check.
+{% endhint %}
+
 <mark style="color:orange;">You can get price directly from</mark> <mark style="color:orange;"></mark><mark style="color:orange;">`globalState`</mark> <mark style="color:orange;"></mark><mark style="color:orange;">struct, but beware of read-only reentrancy, if you are doing it on-chain!</mark>
 
 Next, it is important to understand what exactly is meant by price in liquidity pools. The pool stores the **square root** of the price of token0 relative to token1 in format [`Q64.96`](https://en.wikipedia.org/wiki/Q_\(number_format\)). So, in pseudocode, price value in pool can be expressed as:
