@@ -46,6 +46,25 @@ Also, important to remember that it is important to maintain the order of the to
 
 <mark style="color:orange;">Note: pool address calculation can be different in some blockchains (like zkSync Era).</mark>
 
+**4. Listen to the `Pool` event emitted by AlgebraFactory**
+
+Every time a new default pool is created (via `createPool`), the factory emits:
+
+```solidity
+/// @inheritdoc IAlgebraFactory
+event Pool(address indexed token0, address indexed token1, address pool);
+```
+
+`token0` and `token1` are indexed, so you can filter logs for a specific pair (remember to pass them sorted, `address(token0) < address(token1)`), or omit the filters to pick up every pool ever created by the factory.
+
+{% hint style="info" %}
+This is the approach used by indexers/monitoring services that need to discover pools as they're created, instead of polling `poolByPair` for every possible token pair.
+{% endhint %}
+
+{% hint style="info" %}
+**Using a subgraph:** if a subgraph is deployed for the target Algebra instance, querying it is usually the most convenient option for off-chain use, since it doesn't require an on-chain call or log scanning at all. Its `Pool` entity already stores the resolved pool address (`id`) alongside `token0`/`token1`, so you can just query it by the token pair. See [Subgraphs and analytics](../subgraphs-and-analytics/README.md) for the full schema and [Examples of queries](../subgraphs-and-analytics/examples-of-queries.md) for how to write these queries.
+{% endhint %}
+
 ### Custom Pools
 
 Starting from version 1.1, Algebra Integral supports custom pools that use custom deployers and plugins:
@@ -79,6 +98,21 @@ function computeCustomPoolAddress(address customDeployer, address token0, addres
 ```
 
 For custom pools, the salt includes the `customDeployer` address as the first parameter.
+
+**4. Listen to the `CustomPool` event emitted by AlgebraFactory**
+
+Every time a new custom pool is created (via `createCustomPool`), the factory emits:
+
+```solidity
+/// @inheritdoc IAlgebraFactory
+event CustomPool(address indexed deployer, address indexed token0, address indexed token1, address pool);
+```
+
+All three parameters are indexed, so you can filter by a specific custom deployer, a specific token pair, or both.
+
+{% hint style="info" %}
+**Using a subgraph:** the `Pool` entity's `deployer` field holds the custom deployer address for custom pools, and is the zero address for default (base) pools — so a subgraph query lets you both distinguish custom pools from default ones and filter by a specific custom deployer, without needing to know the pool address in advance. See [Subgraphs and analytics](../subgraphs-and-analytics/README.md) for the full schema.
+{% endhint %}
 
 <mark style="color:orange;">Note: When interacting with peripheral contracts(such as Quoter, SwapRouter, etc), for base pools the plugin deployer parameter should be passed as</mark> `address(0)`
 
