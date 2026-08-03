@@ -4,73 +4,66 @@
 
 The purpose of the Permissioned Pools Plugin is to restrict pool access to approved users only, for pools that contain compliance-restricted tokens (e.g. RWA or security tokens) where the token issuer needs to control who can trade or provide liquidity for the token through the pool.
 
-Briefly, a pool that uses this plugin checks the real end user against a per-token allowlist before allowing the following actions:
+Briefly, a pool that uses this plugin checks the real end user against a per-token allowlist checker before allowing:
 
-* swaps
-* flash loans
-* adding liquidity
-* pool initialization
+* swaps (requires the `SWAP_ALLOWED` flag)
+* adding liquidity (requires the `LIQUIDITY_ALLOWED` flag)
 
-Liquidity removal is always allowed.
+Removing liquidity, flash loans, and pool initialization are never gated by this plugin.
 
 ### Details <a href="#details" id="details"></a>
 
 The permissioned pools module is designed to work through the following Algebra plugin hooks:
 
 * `beforeSwap`
-* `beforeFlash`
-* `beforeModifyPosition`
-* `afterInitialize`
+* `beforeModifyPosition` (only when `liquidityDelta` is positive, i.e. adding liquidity)
 
-Both tokens of a pool are checked independently on every action, even if only one side of the pair is a permissioned token. A token without a registered `PermissionsAdapter` always passes.
+Both tokens of a pool are checked independently, token0 before token1, even if only one side of the pair is a permissioned token. A token with no checker assigned always passes.
 
-Unlike the [Access List](access-list.md) plugin, this plugin doesn't use the raw hook data `sender` or tx.origin. Instead it resolves the real end user through a two-level check:
+Unlike the [Access List](access-list.md) plugin, this plugin doesn't use `tx.origin` or the raw hook `sender`. Instead it resolves the real end user through a two-level check:
 
-1. If the raw hook `sender` is **not** an approved router, no identity resolution happens - its own address is checked against the allowlist directly, exactly like any other candidate address.
-2. If `sender` **is** an approved router (registered in the shared `allowedRouters` registry), the plugin calls `sender.msgSender()` and trusts the address the router reports back as the real end user. 
+1. If the raw hook `sender` is **not** an approved router, no identity resolution happens - its own address is checked against the allowlist directly, exactly like any other candidate address. It isn't automatically allowed; it reverts with `NotAllowed` the same way an unlisted address would.
+2. If `sender` **is** an approved router (registered via `setRouterAllowed` on this pool's own plugin instance), the plugin calls `sender.msgSender()` and trusts the address the router reports back as the real end user.
 
-`tx.origin` always resolves to the EOA that submitted the transaction, but this also means it breaks for account abstraction, smart-contract wallets. Router-reported `msg.sender` fixes this by letting each router resolve the real user through its own logic, at the cost of requiring every router to implement `IMsgSender` and be separately approved.
+`tx.origin` always resolves to the EOA that submitted the transaction, but this also means it breaks for account abstraction and smart-contract wallets. Router-reported `msg.sender` fixes this by letting each router resolve the real user through its own logic, at the cost of requiring every router to implement `IMsgSender` and be separately approved.
 
-### Permissions Adapter & Factory <a href="#permissions-adapter-and-factory" id="permissions-adapter-and-factory"></a>
+Trusted routers are a **per-pool** decision - each plugin instance keeps its own `allowedRouters` mapping, approved by that pool's own `ALGEBRA_BASE_PLUGIN_MANAGER`, rather than one shared registry across every permissioned pool.
 
-`PermissionsAdapter` is the per-token allowlist and kill switch. One adapter is deployed per permissioned token, standalone, by the token issuer:
+For frontends, `isTraderEligible(address account, address token)` returns the account's raw `PermissionFlag` for that token without reverting - `ALL_ALLOWED` if the token has no checker assigned or the registry itself is unset.
 
-* `isAllowed(address account)` - whether `account` may swap/add liquidity involving the token
-* `swappingEnabled()` - emergency kill switch for secondary trading; does not affect liquidity
-* `setAllowed(address account, bool allowed)` / `setAllowedBatch(address[] accounts, bool[] allowed)`
-* `setSwappingEnabled(bool enabled)`
+### Allowlist Checker Registry <a href="#allowlist-checker-registry" id="allowlist-checker-registry"></a>
 
-`PermissionsAdapterFactory` is the shared registry distinguishing a **registered** adapter (self-serve, permissionless) from a **verified** one (approved by the `PERMISSIONED_POOL_MANAGER` role):
+`IAllowlistChecker` is a pluggable, per-token eligibility check:
 
-* `getAdapter(address token)` - the adapter registered for `token`, or `address(0)` if none
-* `isVerified(address token)` - whether the registered adapter has been verified
-* `registerAdapter(address token, address adapter)` - callable only by the adapter's own admin; replacing a registration resets verification to `false`
-* `verifyAdapter(address token, bool verified)` - approval/revocation by the `PERMISSIONED_POOL_MANAGER` role
-* `allowedRouters(address router)` - the shared trusted-router registry used by every permissioned pool to resolve the real sender behind a router
+* `checkAllowlist(address account, address token) returns (PermissionFlag)` - a bitmask combining `SWAP_ALLOWED`, `LIQUIDITY_ALLOWED`, `NONE`, or `ALL_ALLOWED`
 
-If the plugin's `PermissionsAdapterFactory` address is not set (`address(0)`), all permissioned pool checks are bypassed.
+`AllowlistCheckerRegistry` is the governance-controlled `token → checker` registry:
+
+* `getChecker(address token)` - the checker assigned to `token`, or `address(0)` if none
+* `setChecker(address token, address checker)` - assigns (or clears, with `address(0)`) the checker for `token`; reverts unless `checker` supports `IAllowlistChecker` via ERC-165
+
+There's no separate register/verify step anymore - `setChecker` is a single, direct governance action, gated by `PERMISSIONED_POOL_MANAGER`. A token with no checker assigned is simply unpermissioned.
+
+`OnchainIdAllowlistChecker` is the provided reference implementation, gating eligibility on [OnchainID](https://github.com/onchain-id) claims: an account is eligible if its OnchainID identity holds a valid, non-revoked claim of the required topic from a trusted issuer. It has its own `admin` (independent of any protocol role) who manages `requiredTopic` and the `isTrustedIssuer` allowlist. It has no dedicated pause switch - to stop trading, the checker's admin revokes claims or untrusts an issuer, or `PERMISSIONED_POOL_MANAGER` swaps in a different checker (or clears it to `address(0)`, which fully unpermissions the token instead of blocking it).
 
 ### How To Configure the Permissioned Pools Plugin <a href="#how-to-configure-permissioned-pools-plugin" id="how-to-configure-permissioned-pools-plugin"></a>
 
-1. The token issuer deploys their own `PermissionsAdapter(token, admin)`.
-2. The issuer (as the adapter's `admin`) calls `PermissionsAdapterFactory.registerAdapter(token, adapter)`.
-3. An account with the `PERMISSIONED_POOL_MANAGER` role calls `verifyAdapter(token, true)` to approve the adapter. A pool cannot be initialized with this token until this step is done.
-4. The issuer manages the allowlist via `setAllowed` / `setAllowedBatch`, and can independently pause secondary trading via `setSwappingEnabled(false)`.
-5. Any periphery/router contract that pool users are expected to swap, add liquidity, or flash through must be updated to implement `IMsgSender.msgSender()`, reporting the real end user for the current call.
-6. An account with the `PERMISSIONED_POOL_MANAGER` role approves that router via `setRouterAllowed(router, true)` on the factory. Without this step, the router's self-reported `msgSender()` is never trusted, and the router's own address is checked against the allowlist instead.
+1. Deploy an `IAllowlistChecker` implementation for the token - either `OnchainIdAllowlistChecker`, or a custom one.
+2. An account with the `PERMISSIONED_POOL_MANAGER` role calls `AllowlistCheckerRegistry.setChecker(token, checker)`. This alone makes the token permissioned.
+3. Whoever administers that specific checker instance manages actual eligibility (for `OnchainIdAllowlistChecker`: `setTrustedIssuer` / `setTrustedIssuersBatch`, `setRequiredTopic`).
+4. Any periphery/router contract that pool users are expected to swap or add liquidity through must be updated to implement `IMsgSender.msgSender()`, reporting the real end user for the current call.
+5. An account with the pool's `ALGEBRA_BASE_PLUGIN_MANAGER` role approves that router via `setRouterAllowed(router, true)` on the pool's plugin. Without this step, the router's self-reported `msgSender()` is never trusted, and the router's own address is checked against the allowlist instead.
+6. An account with `ALGEBRA_BASE_PLUGIN_MANAGER` points the pool's plugin at the registry via `setAllowlistCheckerRegistry(registry)`.
 
 ### Roles <a href="#roles" id="roles"></a>
 
-The token issuer is the `admin` set at `PermissionsAdapter` deployment time. The issuer can:
+`PERMISSIONED_POOL_MANAGER` is enforced via `IAlgebraFactory(algebraFactory).hasRoleOrOwner(...)` on `AllowlistCheckerRegistry`, shared across the whole registry. It can:
 
-* add or remove a single account from the allowlist
-* batch update allowlist statuses
-* enable or disable secondary trading for their token
-* register their adapter for their token in the factory (must be called by the adapter's own admin)
+* assign or clear the checker for any token
 
-There is a permissioned-pools-specific role on the Algebra factory, `PERMISSIONED_POOL_MANAGER`, enforced via `IAlgebraFactory(algebraFactory).hasRoleOrOwner(...)`. It can:
+`ALGEBRA_BASE_PLUGIN_MANAGER` is a per-pool authorization on the plugin instance itself. It can:
 
-* verify or unverify a registered adapter
-* approve or revoke a trusted router
+* approve or revoke a trusted router for that pool
+* point that pool's plugin at a different `AllowlistCheckerRegistry`
 
-The plugin has a separate admin role, `ALGEBRA_BASE_PLUGIN_MANAGER`, which can call `setPermissionsAdapterFactory(address)` on the plugin itself.
+A checker's own admin role (e.g. `OnchainIdAllowlistChecker.admin`, set at deployment, independent of any protocol role) manages that checker's own eligibility rules - who counts as a trusted issuer, and which claim topic is required.
