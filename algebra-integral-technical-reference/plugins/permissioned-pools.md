@@ -26,8 +26,6 @@ Unlike the [Access List](access-list.md) plugin, this plugin doesn't use `tx.ori
 
 Trusted routers are a **per-pool** decision - each plugin keeps its own `allowedRouters` mapping, approved by that pool's own `ALGEBRA_BASE_PLUGIN_MANAGER`, rather than one shared registry across every permissioned pool.
 
-<figure><img src="../../.gitbook/assets/image (24).png" alt=""><figcaption></figcaption></figure>
-
 ### Allowlist Checker Registry <a href="#allowlist-checker-registry" id="allowlist-checker-registry"></a>
 
 `IAllowlistChecker` is a pluggable, per-token eligibility check:
@@ -42,6 +40,8 @@ Trusted routers are a **per-pool** decision - each plugin keeps its own `allowed
 `setChecker` is a single, direct governance action, gated by `PERMISSIONED_POOL_MANAGER`. A token with no checker assigned is simply unpermissioned.
 
 `OnchainIdAllowlistChecker` is the provided reference implementation, gating eligibility on [OnchainID](https://github.com/onchain-id) claims: an account is eligible if its OnchainID identity holds a valid, non-revoked claim of the required topic from a trusted issuer.
+
+<figure><img src="../../.gitbook/assets/image (55).png" alt=""><figcaption></figcaption></figure>
 
 ### How To Configure the Permissioned Pools Plugin <a href="#how-to-configure-permissioned-pools-plugin" id="how-to-configure-permissioned-pools-plugin"></a>
 
