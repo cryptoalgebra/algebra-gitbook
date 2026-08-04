@@ -26,7 +26,7 @@ Unlike the [Access List](access-list.md) plugin, this plugin doesn't use `tx.ori
 
 Trusted routers are a **per-pool** decision - each plugin keeps its own `allowedRouters` mapping, approved by that pool's own `ALGEBRA_BASE_PLUGIN_MANAGER`, rather than one shared registry across every permissioned pool.
 
-For frontends, `isTraderEligible(address account, address token)` returns the account's raw `PermissionFlag` for that token without reverting - `ALL_ALLOWED` if the token has no checker assigned or the registry is not set.
+<figure><img src="../../.gitbook/assets/image (24).png" alt=""><figcaption></figcaption></figure>
 
 ### Allowlist Checker Registry <a href="#allowlist-checker-registry" id="allowlist-checker-registry"></a>
 
