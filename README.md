@@ -36,9 +36,6 @@ Algebra-powered DEXes have facilitated over **$200 billion** in total trading vo
 **Top 10 Most-Forked DEX Protocol**\
 Ranked as the [**8th most forked protocol**](https://defillama.com/forks) on DeFiLlama, Algebra’s AMM infrastructure continues to set the standard for DEX development and innovation.
 
-**8% of EVM Trading Volume**\
-The protocol powers over **8% of all EVM-based trading activity**, providing a battle-tested engine trusted by dozens of top-tier exchanges.
-
 **Check out the Key Stats via DefilLama:**\
 Algebra Integral-powered DEXes: [https://defillama.com/protocol/forks/algebra-integral](https://defillama.com/protocol/forks/algebra-integral)\
 Algebra CLAMM-powered DEXes: [https://defillama.com/protocol/forks/algebra-dex](https://defillama.com/protocol/forks/algebra-dex)
