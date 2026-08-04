@@ -9,7 +9,7 @@ Briefly, a pool that uses this plugin checks the real end user against a per-tok
 * swaps (requires the `SWAP_ALLOWED` flag)
 * adding liquidity (requires the `LIQUIDITY_ALLOWED` flag)
 
-Removing liquidity, flash loans, and pool initialization are never gated by this plugin.
+Removing liquidity, flash loans, and pool initialization are not gated by this plugin.
 
 ### Details <a href="#details" id="details"></a>
 
@@ -20,16 +20,13 @@ The permissioned pools module is designed to work through the following Algebra 
 
 Both tokens of a pool are checked independently, token0 before token1, even if only one side of the pair is a permissioned token. A token with no checker assigned always passes.
 
-Unlike the [Access List](access-list.md) plugin, this plugin doesn't use `tx.origin` or the raw hook `sender`. Instead it resolves the real end user through a two-level check:
-
-1. If the raw hook `sender` is **not** an approved router, no identity resolution happens - its own address is checked against the allowlist directly, exactly like any other candidate address. It isn't automatically allowed; it reverts with `NotAllowed` the same way an unlisted address would.
-2. If `sender` **is** an approved router (registered via `setRouterAllowed` on this pool's own plugin instance), the plugin calls `sender.msgSender()` and trusts the address the router reports back as the real end user.
+Unlike the [Access List](access-list.md) plugin, this plugin doesn't use `tx.origin` or the raw hook `sender` directly. Every caller must be a registered router: the plugin calls `sender.msgSender()` and trusts the address the router reports back as the real end user, reverting with `RouterNotAllowed` if `sender` was not approved via `setRouterAllowed`.
 
 `tx.origin` always resolves to the EOA that submitted the transaction, but this also means it breaks for account abstraction and smart-contract wallets. Router-reported `msg.sender` fixes this by letting each router resolve the real user through its own logic, at the cost of requiring every router to implement `IMsgSender` and be separately approved.
 
-Trusted routers are a **per-pool** decision - each plugin instance keeps its own `allowedRouters` mapping, approved by that pool's own `ALGEBRA_BASE_PLUGIN_MANAGER`, rather than one shared registry across every permissioned pool.
+Trusted routers are a **per-pool** decision - each plugin keeps its own `allowedRouters` mapping, approved by that pool's own `ALGEBRA_BASE_PLUGIN_MANAGER`, rather than one shared registry across every permissioned pool.
 
-For frontends, `isTraderEligible(address account, address token)` returns the account's raw `PermissionFlag` for that token without reverting - `ALL_ALLOWED` if the token has no checker assigned or the registry itself is unset.
+For frontends, `isTraderEligible(address account, address token)` returns the account's raw `PermissionFlag` for that token without reverting - `ALL_ALLOWED` if the token has no checker assigned or the registry is not set.
 
 ### Allowlist Checker Registry <a href="#allowlist-checker-registry" id="allowlist-checker-registry"></a>
 
@@ -37,22 +34,22 @@ For frontends, `isTraderEligible(address account, address token)` returns the ac
 
 * `checkAllowlist(address account, address token) returns (PermissionFlag)` - a bitmask combining `SWAP_ALLOWED`, `LIQUIDITY_ALLOWED`, `NONE`, or `ALL_ALLOWED`
 
-`AllowlistCheckerRegistry` is the governance-controlled `token → checker` registry:
+`AllowlistCheckerRegistry` is the governance-controlled `token -> checker` registry:
 
 * `getChecker(address token)` - the checker assigned to `token`, or `address(0)` if none
-* `setChecker(address token, address checker)` - assigns (or clears, with `address(0)`) the checker for `token`; reverts unless `checker` supports `IAllowlistChecker` via ERC-165
+* `setChecker(address token, address checker)` - assigns (or clears, with `address(0)`) the checker for `token`
 
-There's no separate register/verify step anymore - `setChecker` is a single, direct governance action, gated by `PERMISSIONED_POOL_MANAGER`. A token with no checker assigned is simply unpermissioned.
+`setChecker` is a single, direct governance action, gated by `PERMISSIONED_POOL_MANAGER`. A token with no checker assigned is simply unpermissioned.
 
-`OnchainIdAllowlistChecker` is the provided reference implementation, gating eligibility on [OnchainID](https://github.com/onchain-id) claims: an account is eligible if its OnchainID identity holds a valid, non-revoked claim of the required topic from a trusted issuer. It has its own `admin` (independent of any protocol role) who manages `requiredTopic` and the `isTrustedIssuer` allowlist. It has no dedicated pause switch - to stop trading, the checker's admin revokes claims or untrusts an issuer, or `PERMISSIONED_POOL_MANAGER` swaps in a different checker (or clears it to `address(0)`, which fully unpermissions the token instead of blocking it).
+`OnchainIdAllowlistChecker` is the provided reference implementation, gating eligibility on [OnchainID](https://github.com/onchain-id) claims: an account is eligible if its OnchainID identity holds a valid, non-revoked claim of the required topic from a trusted issuer.
 
 ### How To Configure the Permissioned Pools Plugin <a href="#how-to-configure-permissioned-pools-plugin" id="how-to-configure-permissioned-pools-plugin"></a>
 
 1. Deploy an `IAllowlistChecker` implementation for the token - either `OnchainIdAllowlistChecker`, or a custom one.
 2. An account with the `PERMISSIONED_POOL_MANAGER` role calls `AllowlistCheckerRegistry.setChecker(token, checker)`. This alone makes the token permissioned.
-3. Whoever administers that specific checker instance manages actual eligibility (for `OnchainIdAllowlistChecker`: `setTrustedIssuer` / `setTrustedIssuersBatch`, `setRequiredTopic`).
+3. Whoever administers that specific checker manages actual eligibility (for `OnchainIdAllowlistChecker`: `setTrustedIssuer` / `setTrustedIssuersBatch`, `setRequiredTopic`).
 4. Any periphery/router contract that pool users are expected to swap or add liquidity through must be updated to implement `IMsgSender.msgSender()`, reporting the real end user for the current call.
-5. An account with the pool's `ALGEBRA_BASE_PLUGIN_MANAGER` role approves that router via `setRouterAllowed(router, true)` on the pool's plugin. Without this step, the router's self-reported `msgSender()` is never trusted, and the router's own address is checked against the allowlist instead.
+5. An account with the pool's `ALGEBRA_BASE_PLUGIN_MANAGER` role approves that router via `setRouterAllowed(router, true)` on the pool's plugin. Without this step, the router's self-reported `msgSender()` isn't trusted
 6. An account with `ALGEBRA_BASE_PLUGIN_MANAGER` points the pool's plugin at the registry via `setAllowlistCheckerRegistry(registry)`.
 
 ### Roles <a href="#roles" id="roles"></a>
@@ -61,7 +58,7 @@ There's no separate register/verify step anymore - `setChecker` is a single, dir
 
 * assign or clear the checker for any token
 
-`ALGEBRA_BASE_PLUGIN_MANAGER` is a per-pool authorization on the plugin instance itself. It can:
+`ALGEBRA_BASE_PLUGIN_MANAGER` is a per-pool authorization on the plugin itself. It can:
 
 * approve or revoke a trusted router for that pool
 * point that pool's plugin at a different `AllowlistCheckerRegistry`
