@@ -99,6 +99,7 @@
   * [Whitelist Discount Fee](algebra-integral-technical-reference/plugins/whitelist-discount-fee.md)
   * [Safety Switch](algebra-integral-technical-reference/plugins/safety-switch.md)
   * [Access List](algebra-integral-technical-reference/plugins/access-list.md)
+  * [Permissioned Pools](algebra-integral-technical-reference/plugins/permissioned-pools.md)
   * [Position Limit Orders](algebra-integral-technical-reference/plugins/position-limit-orders.md)
   * [Managed Swap Fee](algebra-integral-technical-reference/plugins/managed-swap-fee.md)
   * [Automated Liquidity Management (A-ALM)](algebra-integral-technical-reference/plugins/automated-liquidity-management-a-alm.md)

@@ -29,15 +29,15 @@ Building plugins for Algebra Integral unlocks unique opportunities for developer
 
 <summary>Plugins Technical Overview:</summary>
 
-[https://medium.com/@crypto\_algebra/algebra-integral-plugins-technical-overview-315e6e7bc72f](https://medium.com/@crypto_algebra/algebra-integral-plugins-technical-overview-315e6e7bc72f)&#x20;
+[https://medium.com/@crypto\_algebra/algebra-integral-plugins-technical-overview-315e6e7bc72f](https://medium.com/@crypto_algebra/algebra-integral-plugins-technical-overview-315e6e7bc72f)
 
 </details>
 
 <details>
 
-<summary>Developer Docs: </summary>
+<summary>Developer Docs:</summary>
 
-[Broken link](/broken/pages/dQl43wBrPi5fRdZSQJ47 "mention")
+[Algebra Integral / Technical Reference](https://app.gitbook.com/s/Q0xXWotbDRlc7WzSWZQV/algebra-integral-technical-reference "mention")
 
 </details>
 
@@ -59,7 +59,7 @@ Building plugins for Algebra Integral unlocks unique opportunities for developer
 
 <details>
 
-<summary>Audits: </summary>
+<summary>Audits:</summary>
 
 [https://github.com/cryptoalgebra/Algebra/tree/master/audits](https://github.com/cryptoalgebra/Algebra/tree/master/audits)
 
