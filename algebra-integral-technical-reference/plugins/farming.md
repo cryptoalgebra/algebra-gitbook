@@ -66,14 +66,42 @@ The default `TICK_SPACING` in Algebra is `60`, but it can be changed per pool. T
 
 ***
 
+## Anti-JIT Farming Buffer
+
+Since v1.2.3, `AlgebraEternalFarming` adds a second protection against phantom liquidity / JIT farming: rewards claimed too soon after a position's liquidity was added are forfeited instead of paid out.
+
+### Vesting timestamp
+
+Each farm stores `enteredTimestamp`, updated on every liquidity change:
+
+* **First entry**: `enteredTimestamp` is set to the current block timestamp.
+* **Increasing liquidity** (top-up): `enteredTimestamp` is recalculated as a liquidity-weighted blend of the old timestamp and the current time — a small top-up on a large position barely moves it, a large top-up on a small position pulls it close to "now".
+* **Decreasing liquidity**: `enteredTimestamp` is left unchanged.
+
+### Buffer
+
+* `defaultFarmingBuffer` is the global buffer duration in seconds; `poolFarmingBuffer(pool)` is an optional per-pool override (`0` falls back to the default). Both are set via `setFarmingBuffer` and capped at 7 days.
+* If a reward is collected, or a position exits, less than `buffer` seconds after its `enteredTimestamp`, that reward is forfeited: it's credited to a protocol-owned bucket (`rewards(address(0), token)`) instead of the position owner, and `RewardsForfeited` is emitted instead of `RewardsCollected`.
+* Forfeited rewards are withdrawn via `withdrawForfeitedRewards`, which emits `ForfeitedRewardsWithdrawn`.
+
+### Buffer exemption
+
+Trusted addresses can be exempted from the buffer entirely via `setBufferExempt(owner, true)` — for example, ALM vaults, which must mint a new position on every rebalance and would otherwise look freshly-entered on every claim.
+
+{% hint style="info" %}
+Setting `defaultFarmingBuffer` to `0` disables forfeiture globally. A per-pool buffer of `0` means "use the default".
+{% endhint %}
+
+***
+
 ## Roles
 
 Two privileged roles control farming administration:
 
-| Role                          | Permissions                                                                                                                                           |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `INCENTIVE_MAKER_ROLE`        | Create a new farming (`createEternalFarming`), manually deactivate it (`deactivateIncentive`), change reward rates (`setRates`).                      |
-| `FARMINGS_ADMINISTRATOR_ROLE` | Withdraw excess rewards (`decreaseRewardsAmount`), activate emergency withdraw mode (`setEmergencyWithdrawStatus`), update the FarmingCenter address. |
+| Role                          | Permissions                                                                                                                                                                                                                       |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `INCENTIVE_MAKER_ROLE`        | Create a new farming (`createEternalFarming`), manually deactivate it (`deactivateIncentive`), change reward rates (`setRates`), withdraw forfeited rewards (`withdrawForfeitedRewards`), set buffer exemptions (`setBufferExempt`). |
+| `FARMINGS_ADMINISTRATOR_ROLE` | Withdraw excess rewards (`decreaseRewardsAmount`), activate emergency withdraw mode (`setEmergencyWithdrawStatus`), update the FarmingCenter address, set the anti-JIT farming buffer (`setFarmingBuffer`).                     |
 
 Any address can **add** rewards to an existing active farming via `addRewards` (no special role required).
 
@@ -124,7 +152,7 @@ This ensures the reward share is always proportional to the actual current liqui
 When an NFT is **burned** (liquidity reaches 0), the exit is triggered automatically and the position is removed from farming entirely.
 
 {% hint style="info" %}
-Because exit + re-enter happens atomically on every liquidity change, there is no need to manually exit farming before adjusting a position.
+Because exit + re-enter happens atomically on every liquidity change, there is no need to manually exit farming before adjusting a position. The re-enter step is also where the vesting timestamp used by the [Anti-JIT Farming Buffer](#anti-jit-farming-buffer) gets recalculated.
 {% endhint %}
 
 ***
