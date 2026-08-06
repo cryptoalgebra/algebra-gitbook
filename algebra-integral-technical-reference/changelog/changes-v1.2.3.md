@@ -12,4 +12,4 @@ Integral v1.2.3 code can be found in the [integral-v1.2.3](https://github.com/cr
 
 ### Farming
 
-* `AlgebraEternalFarming` gained an anti-JIT farming buffer: rewards claimed too soon after a position's (liquidity-weighted) vesting timestamp are forfeited to a protocol-owned address instead of paid out. Buffer duration is configurable globally and per pool, and trusted addresses (e.g. ALM vaults) can be exempted. See [Anti-JIT Farming Buffer](../plugins/farming.md#anti-jit-farming-buffer) in the Farming page for details.
+* `AlgebraEternalFarming` now includes an anti-JIT farming buffer: rewards claimed too soon after a position's liquidity-weighted vesting timestamp are forfeited to a protocol-owned address instead of being paid out. The buffer duration is configurable both globally and on a per-pool basis, and trusted addresses (e.g., ALM vaults) can be exempted. See [Anti-JIT Farming Buffer](../plugins/farming.md#anti-jit-farming-buffer) in the Farming page for details.
