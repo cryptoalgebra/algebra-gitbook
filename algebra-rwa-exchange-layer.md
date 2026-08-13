@@ -44,7 +44,7 @@ Pool prices can be continuously anchored to an asset's official NAV or exchange 
 
 This makes the mechanism applicable to tokenized funds, NAV-priced securities, stable assets, and FX markets where price discovery should remain closely connected to an external reference value.
 
-Mechanically, an offchain Rebalance Manager monitors the oracle and pool price. When divergence exceeds a configured threshold, it initiates an onchain rebalance. The plugin withdraws the pool's main liquidity position, uses a separate background position to move the pool price toward the oracle rate, and redeploys the main position around the updated price.
+Mechanically, an offchain Rebalance Manager monitors the oracle and pool price. When divergence exceeds a configured threshold, it initiates an onchain rebalance. [The plugin](https://x.com/CryptoAlgebra/status/2082479421316096088?s=20) withdraws the pool's main liquidity position, uses a separate background position to move the pool price toward the oracle rate, and redeploys the main position around the updated price.
 
 An internal cap limits the maximum price movement during a single rebalance, reducing the potential value available to sandwich attacks. LP funds remain within the pool architecture throughout the process, and the plugin cannot withdraw them to external counterparties.
 
