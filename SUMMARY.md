@@ -28,6 +28,7 @@
 
 * [Modularity: Use Cases](modularity-use-cases.md)
 * [Plugin Marketplace](plugin-marketplace.md)
+* [Algebra RWA Exchange Layer](algebra-rwa-exchange-layer.md)
 * [Algebra Partner Support](algebra-partner-support.md)
 
 ## User Guide Template For DEXes
