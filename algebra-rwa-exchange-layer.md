@@ -36,8 +36,6 @@ As a result, tokenized asset supply can grow significantly faster than secondary
 
 Algebra is designed to provide the missing **RWA exchange layer** between tokenization and active onchain markets: infrastructure capable of pricing, trading, and providing liquidity for different classes of tokenized assets while preserving their underlying economic and compliance constraints.
 
-<figure><img src=".gitbook/assets/image (61).png" alt=""><figcaption></figcaption></figure>
-
 #### RWA Exchange Capabilities
 
 **NAV / FX Plugin**
@@ -49,8 +47,6 @@ This makes the mechanism applicable to tokenized funds, NAV-priced securities, s
 Mechanically, an offchain Rebalance Manager monitors the oracle and pool price. When divergence exceeds a configured threshold, it initiates an onchain rebalance. The plugin withdraws the pool's main liquidity position, uses a separate background position to move the pool price toward the oracle rate, and redeploys the main position around the updated price.
 
 An internal cap limits the maximum price movement during a single rebalance, reducing the potential value available to sandwich attacks. LP funds remain within the pool architecture throughout the process, and the plugin cannot withdraw them to external counterparties.
-
-<figure><img src=".gitbook/assets/image (57).png" alt=""><figcaption></figcaption></figure>
 
 **Native Yield-Bearing Token Support**
 
@@ -70,15 +66,13 @@ Algebra plugins can enforce eligibility requirements at the pool level, allowing
 
 This makes it possible to operate permissionless and permissioned markets within the same exchange architecture rather than maintaining separate trading systems.
 
-<figure><img src=".gitbook/assets/image (24).png" alt=""><figcaption></figcaption></figure>
-
 **Oracle Guards & Safety Switch**
 
 RWA markets may need to stop trading when an oracle deviates, markets become unusually volatile, an underlying venue closes, a corporate action occurs, or a security system identifies abnormal activity.
 
 Algebra can enforce oracle deviation limits, trading-hour restrictions, and emergency pauses at the pool level.
 
-The **Safety Switch plugin** provides a dedicated kill switch for individual pools. A Guard role can immediately pause pool operations, while an Admin role controls pausing and resumption. The plugin adds approximately 14K gas overhead to swap, mint, and burn operations and can be configured directly at the contract level without requiring frontend changes.
+The [**Safety Switch plugin**](https://market.algebra.finance/plugin/safety-switch/) provides a dedicated kill switch for individual pools. A Guard role can immediately pause pool operations, while an Admin role controls pausing and resumption. The plugin adds approximately 14K gas overhead to swap, mint, and burn operations and can be configured directly at the contract level without requiring frontend changes.
 
 It can also integrate with onchain security monitoring systems. A monitoring service can hold the Guard role and automatically pause a market when predefined threats are detected, while resumption remains subject to human review.
 
@@ -86,7 +80,7 @@ It can also integrate with onchain security monitoring systems. A monitoring ser
 
 Different RWA markets require different fee behavior. A NAV-anchored fund, stablecoin pair, tokenized equity, and volatile crypto/RWA market should not necessarily operate under the same fixed fee tier.
 
-Algebra's Dynamic Fee mechanism adjusts fees according to market conditions rather than requiring operators to select a permanent fee tier when a pool is created.
+Algebra's [Dynamic Fee mechanism](https://market.algebra.finance/plugin/dynamic-fee/) adjusts fees according to market conditions rather than requiring operators to select a permanent fee tier when a pool is created.
 
 The system can account for factors such as volatility, trading activity, and available liquidity when determining the appropriate fee. Stable and NAV-anchored markets can therefore remain at relatively low fees during normal conditions, while more volatile markets can increase fees when additional protection for liquidity providers is required.
 
