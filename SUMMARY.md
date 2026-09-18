@@ -97,6 +97,7 @@
   * [Farming](algebra-integral-technical-reference/plugins/farming.md)
   * [Dynamic Fee](algebra-integral-technical-reference/plugins/dynamic-fee.md)
   * [Sliding Fee](algebra-integral-technical-reference/plugins/sliding-fee.md)
+  * [Stable Pair Fee](algebra-integral-technical-reference/plugins/stable-pair-fee.md)
   * [Whitelist Discount Fee](algebra-integral-technical-reference/plugins/whitelist-discount-fee.md)
   * [Safety Switch](algebra-integral-technical-reference/plugins/safety-switch.md)
   * [Access List](algebra-integral-technical-reference/plugins/access-list.md)
